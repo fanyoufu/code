@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="jquery-1.11.0.js"></script>
+</head>
+<body>
+	<p>通过node port3000.js 可以打开这个页面。</p>
+	<p> 讨论ajax跨域</p>
+	<button id="btn3000">ajax请求3000端口</button>
+	<button id="btn4000">ajax请求4000端口</button>
+	<button id="btn4000jsonp">ajax请求4000端口-jsonp</button>
+	<button id="btnzhihu">ajax直接请求zhihu</button>
+	<button id="btnzhihu_server">服务器代理请求zhihu</button>
+	<hr>
+	<div id="result">
+	</div>
+
+	
+	<script type="text/javascript">		
+
+	function addScriptTag(src) {
+	  var script = document.createElement('script');
+	  script.setAttribute("type","text/javascript");
+	  script.src = src;
+	  document.body.appendChild(script);
+	}
+
+	window.onload = function () {
+	  addScriptTag('http://localhost:4000/getData?callback=foo');
+	}
+
+	function f(data) {
+	  console.log(data);
+	}
+
+
+		$("#btn3000").on("click",function(){
+			console.info("btn3000");
+			$.getJSON("/getData",function(d){
+				console.log(d)
+				$("#result").html(JSON.stringify(d));
+			})
+		});
+
+		$("#btn4000").on("click",function(){
+			console.info("btn4000");
+			$.ajax({
+				type:"GET",
+				url:"http://localhost:4000/getData",
+				dataType:"json",
+				success:function(d){
+					console.log(d)
+					$("#result").html(JSON.stringify(d));
+				}
+			});
+		})
+
+		$("#btn4000jsonp").on("click",function(){
+			console.info("btn4000jsonp");
+			$.ajax({
+				type:"GET",
+				url:"http://localhost:4000/getDataJsonp",
+				dataType:"jsonp",
+				success:function(d){
+					console.log(d)
+					$("#result").html(JSON.stringify(d));
+				}
+			});
+		})
+
+		
+
+		$("#btnzhihu").on("click",function(){
+			console.info("btnzhihu");
+			$.ajax({
+				type:"GET",
+				url:"http://localhost:3000/getZhihu",
+				dataType:"json",
+				success:function(d){
+					console.log(d)
+					$("#result").html(JSON.stringify(d));
+				}
+			});
+		})
+
+		$("#btnzhihu_server").on("click",function(){
+			console.info("btnzhihu_server");
+			$.ajax({
+				type:"GET",
+				url:"/getZhihu",
+				dataType:"json",
+				success:function(d){
+					console.log(d)
+					$("#result").html(JSON.stringify(d));
+				}
+			});
+		})
+	</script>
+
+</body>
+</html>
