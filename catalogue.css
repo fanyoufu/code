@@ -1,0 +1,107 @@
+.pl0 {
+            padding-left: 0.5em;
+        }
+        .pl1 {
+            padding-left: 1em;
+        }
+
+        .pl2 {
+            padding-left: 2em;
+        }
+
+        .pl3 {
+            padding-left: 3em;
+        }
+
+        .pl4 {
+            padding-left: 4em;
+        }
+
+        .pl5 {
+            padding-left: 5em;
+        }
+        .catalogue { 
+            counter-reset: outline-h2;
+        }
+        
+        .outline-h1 {
+            counter-reset: outline-h2;
+        }
+
+        .outline-h2 {
+            counter-reset: outline-h3;
+        }
+
+        .outline-h3 {
+            counter-reset: outline-h4;
+        }
+
+        .outline-h4 {
+            counter-reset: outline-h5;
+        }
+
+        .outline-h5 {
+            counter-reset: outline-h6;
+        }
+
+        .outline-h2:before {
+            counter-increment: outline-h2;
+            content: counter(outline-h2) '. ';
+        }
+
+        .outline-h3:before {
+            counter-increment: outline-h3;
+            content: counter(outline-h2) '.'counter(outline-h3) '. ';
+        }
+
+        .outline-h4:before {
+            counter-increment: outline-h4;
+            content: counter(outline-h2) '.'counter(outline-h3) '.'counter(outline-h4) '. ';
+        }
+
+        .outline-h5:before {
+            counter-increment: outline-h5;
+            content: counter(outline-h2) '.'counter(outline-h3) '.'counter(outline-h4) '.'counter(outline-h5) '. ';
+        }
+
+        .outline-h6:before {
+            counter-increment: outline-h6;
+            content: counter(outline-h2) '.'counter(outline-h3) '.'counter(outline-h4) '.'counter(outline-h5) '.'counter(outline-h6) '. ';
+        }
+
+
+        .catalogue {
+            position: fixed;
+            left:20px;
+            top:20px;
+            bottom:0;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .catalogue_link {
+            display: block;
+            line-height: 2;
+            text-decoration: none;
+            color: #aaa;
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1)
+        }
+
+        .catalogue_link.visible {
+            color: #111;
+
+            transform: translate(5px);
+        }
+
+        .toc-marker {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        .toc-marker path {
+            -webkit-transition: all 0.3s ease;
+            transition: all 0.3s ease;
+        }
