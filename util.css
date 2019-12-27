@@ -1,11 +1,10 @@
 /*基本CSS工具类*/
 ._divider {
   position: relative;
-  top: 2em;
   height: auto;
   margin: auto;
   overflow: hidden;
-  line-height: 1;
+  line-height: 3;
   text-align: center;
   color: #9199a1;
   font-size: 14px;
