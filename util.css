@@ -35,6 +35,9 @@
   margin-left: 0 !important;
   margin-right: 0 !important;
 }
+._p3 {
+  padding: 3rem;
+}
 ._z1 {
   z-index: 1000 !important;
 }
