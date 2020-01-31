@@ -72,55 +72,41 @@
     </div>
 
     <script>
-        var baseURL = "192.168.0.107:3000"
-        var socket = null; 
-        $('.modal').modal('setting', 'transition', 'vertical flip').modal('setting', 'closable', false).modal('show');
+        // 创建并返回socket连接对象
+        function createSocket () {
+            var socket = new WebSocket('ws://'+baseURL+'/test');
 
-        var yourName = ""
-        $("#login").click(function() {
-            $.post('http://'+baseURL+'/login',{name:$('#userName').val().trim()}).then(rs=>{
-                if(rs.code === 200){
-                    
-                    $("#nickname").text(rs.nickname)
-                    $('.modal').modal('hide')
+            // 监听连接
+            socket.addEventListener('open', function (event) {
+                var msg = createMsg("上线了")
+                socket.send(msg);
+            });
 
-                    socket = new WebSocket('ws://'+baseURL+'/test');
+            // 监听信息
+            socket.addEventListener('message', function (event) {
+                console.log('Message from server ', event.data);
+                showMessage(event.data)
 
-                    // 监听连接
-                    socket.addEventListener('open', function (event) {
-                        var msg = createMsg("上线了")
-                        socket.send(msg);
-                    });
+            });
+            // 监听信息
+            socket.addEventListener('close', function (event) {
+                console.log('关闭连接', event.data);
 
-                    // 监听信息
-                    socket.addEventListener('message', function (event) {
-                        console.log('Message from server ', event.data);
-                        showMessage(event.data)
-
-                    });
-
-                } else {
-                    alert(rs.msg)
-                }
-            })
-        })
+            });
+            return socket
+        }
         
-        
-        function showMessage(msg) {
-            var obj = JSON.parse(msg)
-            var dom = document.createElement('div')
-            dom.className = "item"
-            dom.innerHTML = `
-                 <h2 class="header">${obj.nickname}</h2>
-                  <div class="middle aligned content">
-                    ${obj.msg}
-                </div>`
-            document.getElementById('list').appendChild(dom)
-
-            $(".main").animate({"scrollTop":$("#list").height()},1000)
+        // 获取保存在cookie中的nickname
+        function getLocalnickname () {
+            var arr = document.cookie.match(/nickname=(\w+)/)
+            if(arr && arr.length) {
+                return arr[1]
+            } else{
+                return null
+            }
         }
 
-
+        // 创建消息对象
         function createMsg(word,person=undefined) {
             if(!person){
                 return JSON.stringify( {
@@ -134,18 +120,55 @@
                 } )
             }
         }
+
+        // 把收到的信息显示在页面上
+        function showMessage(msg) {
+            var obj = JSON.parse(msg)
+            var domStr = `<div class="item">
+                 <h2 class="header">${obj.nickname}</h2>
+                  <div class="middle aligned content">
+                    ${obj.msg}
+                </div></div>`
+            $('#list').append(domStr)
+
+            $(".main").animate({"scrollTop":$("#list").height()},1000)
+        }
+
+        // 192.168.0.107:是本机ip地址，请换成你自已的
+        var baseURL = "192.168.0.107:3000"
         
+        var socket = null
+        
+        var nickname = getLocalnickname()
+        if(!nickname) {
+            $('.modal').modal('setting', 'transition', 'vertical flip').modal('setting', 'closable', false).modal('show');
+        } else {
+            socket = createSocket();
+            $("#nickname").text(nickname)
+        }
+
+        $("#login").click(function() {
+            $.post('http://'+baseURL+'/login',{name:$('#userName').val().trim()}).then(rs=>{
+                if(rs.code === 200){
+                    $("#nickname").text(rs.nickname)
+                    $('.modal').modal('hide');
+                    socket = createSocket();
+                } else {
+                    alert(rs.msg)
+                }
+            })
+        })
         $('#btn').click(function(){
             var word = $('#words').val().trim()
             var msg = createMsg(word)
             socket.send(msg)
             $('#words').val('')
         })
-       $('#words').keyup((e)=>{
-           if(e.keyCode === 13) {
-            $('#btn').click()
-           }
-       })
+        $('#words').keyup((e)=>{
+            if(e.keyCode === 13) {
+                $('#btn').click()
+            }
+        })
     
     </script>
 
