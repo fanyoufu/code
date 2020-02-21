@@ -11,7 +11,7 @@
 - 下载代码，并进入此目录
 - 运行 `node i` 以安装依赖
 - 把static下index.html中的baseURL改成本机ip地址。
-- `node app.js`  启动服务器
+- `node app_http.js`  启动服务器
 - 访问页面:开启浏览器，在地址栏中输入： localhost:3000访问。 可以使用不同的浏览器进行访问，以模拟多个客户端访问。
 
 
